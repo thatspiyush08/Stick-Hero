@@ -5,27 +5,19 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 
-<AnchorPane onMousePressed="#extendStick" onMouseReleased="#rotateStick" prefHeight="522.0" prefWidth="1144.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.GameControl">
+<AnchorPane fx:id="anchorPane" onMousePressed="#extendStick" onMouseReleased="#rotateStick" prefHeight="522.0" prefWidth="1105.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.GameControl">
    <children>
-      <ImageView fitHeight="784.0" fitWidth="1144.0" layoutX="-1.0" layoutY="-3.0" onMousePressed="#extendStick">
+      <ImageView fitHeight="529.0" fitWidth="1150.0" layoutX="-9.0" layoutY="-7.0">
          <image>
-            <Image url="@CorrectTheme.png" />
+            <Image url="@finalTheme.png" />
          </image>
       </ImageView>
-      <ImageView id="Shero" fx:id="Shero" fitHeight="85.0" fitWidth="77.0" layoutX="151.0" layoutY="234.0">
+      <ImageView fx:id="Shero" fitHeight="52.0" fitWidth="51.0" layoutX="201.0" layoutY="305.0">
          <image>
             <Image url="@Player.png" />
          </image>
       </ImageView>
       <Button fx:id="Pause" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" onAction="#Pause" prefHeight="52.0" prefWidth="62.0" style="-fx-opacity: 0;" text="Button" />
-      <Rectangle fx:id="stickLine" arcHeight="5.0" arcWidth="5.0" fill="#1d1e1e" layoutX="224.0" layoutY="319.0" nodeOrientation="RIGHT_TO_LEFT" stroke="BLACK" strokeType="INSIDE" width="4.0" AnchorPane.bottomAnchor="452.0" AnchorPane.topAnchor="319.0" />
-      <ImageView fx:id="platform0" fitHeight="363.0" fitWidth="160.0" layoutX="118.0" layoutY="292.0">
-         <image>
-            <Image url="@Platform.png" />
-         </image>
-      </ImageView>
-      <Rectangle id="platform1" fx:id="Platform1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="337.0" layoutX="533.0" layoutY="318.0" stroke="BLACK" strokeType="INSIDE" style="-fx-opacity: 0;" width="83.0" />
-      <Rectangle id="platform0" fx:id="Platform0" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="337.0" layoutX="157.0" layoutY="318.0" stroke="BLACK" strokeType="INSIDE" style="-fx-opacity: 0;" width="83.0" />
-      <Rectangle id="platform0" fx:id="Platform2" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="337.0" layoutX="1010.0" layoutY="318.0" stroke="BLACK" strokeType="INSIDE" style="-fx-opacity: 0;" width="132.0" />
+      <Rectangle fx:id="stickLine" arcHeight="5.0" arcWidth="5.0" fill="#1d1e1e" layoutX="250.0" layoutY="355.0" stroke="BLACK" strokeType="INSIDE" width="4.0" />
    </children>
 </AnchorPane>

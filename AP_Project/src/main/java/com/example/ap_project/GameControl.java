@@ -14,8 +14,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
+import javafx.scene.layout.Pane;
 import java.io.IOException;
+
+import static com.example.ap_project.SceneController.rectangles;
 
 public class GameControl {
     private Stickman stickman;
@@ -41,74 +43,116 @@ public class GameControl {
     private ImageView Shero;
     int flag = 0;
 
+
+
+
+
+    double sticklenght=0;
+    private boolean extending = false;
+
     public void extendStick() {
 
-//        if (stickLine != null)
-//        {
-        if (flag == 0){
-            timeline = new Timeline(new KeyFrame(Duration.millis(100),event->{
+            extending = true;
+            timeline = new Timeline(new KeyFrame(Duration.millis(100), event -> {
                 double currentLength = stickLine.getHeight();
-                double newLength = currentLength + 5;
+                double newLength = currentLength + 20; // Increase the length by a larger amount
                 stickLine.setHeight(newLength);
+                sticklenght=newLength;
                 stickLine.setTranslateY(-newLength + 5);
-                stickman.Current_Platform=Platform0;
-                stickman.Next_Platform=Platform1;
             }));
             timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.setOnFinished(event -> extending = false);
             timeline.play();
-            flag = 1;
-        }
-
-//        }
+            if (!extending){
+                rotateStick();
+            }
 
     }
+
 
     public void rotateStick() {
-        if (flag == 1){
+
             timeline.pause();
+
             stickLine.setRotate(0);
-            stickLine.setTranslateY(-(stickLine.getHeight()/2)+3);
-            stickLine.setTranslateX(stickLine.getHeight()/2.0);
-            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.1), stickLine);
-            rotateTransition.setByAngle(90); // Rotate by 90 degrees
+            stickLine.setTranslateY(-(stickLine.getHeight() / 2) + 3);
+            stickLine.setTranslateX(stickLine.getHeight() / 2.0);
+
+            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.06), stickLine);
+            rotateTransition.setByAngle(90);
             rotateTransition.play();
-            movement();
 
-        }
-
-//        timeline.stop();
+            rotateTransition.setOnFinished(event -> {
+                movement();
+                extendStick();
+            //    extendStick();  // Call extendStick after the stick
+            });
 
     }
 
-    public void movement(){
-        TranslateTransition move = new TranslateTransition(Duration.millis(2000),Shero);
-        move.setByX(stickLine.getHeight()+10);
+    public void movement() {
+        TranslateTransition move = new TranslateTransition(Duration.millis(2000), Shero);
+        move.setByX(stickLine.getHeight() + 10);
         move.setCycleCount(1);
 
         move.setOnFinished(event -> {
-            if (stickman.Next_Platform.getLayoutX()-stickman.Current_Platform.getLayoutX()-65>stickLine.getHeight()||(stickman.Next_Platform.getLayoutX()-stickman.Current_Platform.getLayoutX()-60+stickman.Next_Platform.getWidth()<stickLine.getHeight())) {
+            boolean isOnPlatform = false;
+            for (int i = 1; i < rectangles.length; i++) {
+                if (350 - 40 <= stickLine.getHeight() && (350 - 60 + rectangles[i].getWidth() >= stickLine.getHeight())) {
+                    // Stickman is on the platform
+                    isOnPlatform = true;
+
+                    // Calculate the shift distance
+                    double shiftDistance = rectangles[i].getLayoutX() - rectangles[i - 1].getLayoutX() + rectangles[i].getX() + (rectangles[i - 1].getWidth() / 2);
+
+                    // Shift all rectangles and the player using TranslateTransition
+                    for (int j = 0; j < rectangles.length; j++) {
+                        TranslateTransition shiftRectangle = new TranslateTransition(Duration.millis(1000), rectangles[j]);
+                        shiftRectangle.setToX(rectangles[j].getTranslateX() - shiftDistance);
+                        shiftRectangle.play();
+                    }
+
+                    TranslateTransition shiftPlayer = new TranslateTransition(Duration.millis(1000), Shero);
+                    shiftPlayer.setToX(Shero.getTranslateX() - shiftDistance+20);
+                    shiftPlayer.play();
+                    stickLine.setHeight(20);
+                    stickLine.setRotate(0);
+                    TranslateTransition shiftStick = new TranslateTransition(Duration.millis(1000), stickLine);
+                    shiftStick.setToX(Shero.getTranslateX() - shiftDistance+17);
+                    shiftStick.play();
+                    // Update the Stickman's current and next platforms
+                    stickman.Current_Platform = rectangles[i];
+                    if (i < rectangles.length - 1) {
+                        stickman.Next_Platform = rectangles[i + 1];
+
+
+
+
+
+
+                    } else {
+                        stickman.Next_Platform = null;
+                    }
+                    break;
+                }
+            }
+
+            if (!isOnPlatform) {
                 // Stickman is not on any platform, initiate downward movement
                 fall();
             }
-            else{
-                TranslateTransition moveToCenter = new TranslateTransition(Duration.millis(500), Shero);
-                moveToCenter.setToX(stickman.Next_Platform.getLayoutX()-stickman.Current_Platform.getLayoutX()-50+stickman.Next_Platform.getX()+(stickman.Next_Platform.getWidth()/2));
-                moveToCenter.play();
-            }
-
         });
 
         move.play();
+
     }
 
     public void fall() {
         TranslateTransition fallDown = new TranslateTransition(Duration.millis(1000), Shero);
-        fallDown.setByY(200); // Adjust the value as needed for the downward fall
+        fallDown.setByY(250); // Adjust the value as needed for the downward fall
         fallDown.setCycleCount(1);
         fallDown.play();
     }
-
-
 
     public void Pause(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("/com/example/ap_project/Pause.fxml"));
