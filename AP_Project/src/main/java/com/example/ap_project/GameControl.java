@@ -43,67 +43,61 @@ public class GameControl {
     private ImageView Shero;
     int flag = 0;
 
-
-
-
-
     double sticklenght=0;
     private boolean extending = false;
 
     public void extendStick() {
-
+        if (!extending) {
             extending = true;
             timeline = new Timeline(new KeyFrame(Duration.millis(100), event -> {
                 double currentLength = stickLine.getHeight();
                 double newLength = currentLength + 20; // Increase the length by a larger amount
                 stickLine.setHeight(newLength);
                 sticklenght=newLength;
-                stickLine.setTranslateY(-newLength + 5);
+                stickLine.setTranslateY(-newLength + 20);
             }));
             timeline.setCycleCount(Timeline.INDEFINITE);
-            timeline.setOnFinished(event -> extending = false);
+//            timeline.setOnFinished(event -> extending = false);
             timeline.play();
-            if (!extending){
-                rotateStick();
-            }
 
+        }
     }
 
 
     public void rotateStick() {
 
-            timeline.pause();
+        timeline.pause();
+        extending = false;
+        stickLine.setRotate(0);
+        stickLine.setTranslateY(-(stickLine.getHeight() / 2) + 2);
+        stickLine.setTranslateX(stickLine.getHeight() / 2.0);
 
-            stickLine.setRotate(0);
-            stickLine.setTranslateY(-(stickLine.getHeight() / 2) + 3);
-            stickLine.setTranslateX(stickLine.getHeight() / 2.0);
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.1), stickLine);
+        rotateTransition.setByAngle(90);
+        rotateTransition.play();
 
-            RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.06), stickLine);
-            rotateTransition.setByAngle(90);
-            rotateTransition.play();
-
-            rotateTransition.setOnFinished(event -> {
-                movement();
-                extendStick();
+        rotateTransition.setOnFinished(event -> {
+            movement();
             //    extendStick();  // Call extendStick after the stick
-            });
+        });
 
     }
 
     public void movement() {
-        TranslateTransition move = new TranslateTransition(Duration.millis(2000), Shero);
-        move.setByX(stickLine.getHeight() + 10);
+        TranslateTransition move = new TranslateTransition(Duration.millis(1000), Shero);
         move.setCycleCount(1);
 
         move.setOnFinished(event -> {
             boolean isOnPlatform = false;
             for (int i = 1; i < rectangles.length; i++) {
-                if (350 - 40 <= stickLine.getHeight() && (350 - 60 + rectangles[i].getWidth() >= stickLine.getHeight())) {
+                if (350 - 40 <= stickLine.getHeight() && (350+ rectangles[i].getWidth() >= stickLine.getHeight())) {
                     // Stickman is on the platform
                     isOnPlatform = true;
 
-                    // Calculate the shift distance
-                    double shiftDistance = rectangles[i].getLayoutX() - rectangles[i - 1].getLayoutX() + rectangles[i].getX() + (rectangles[i - 1].getWidth() / 2);
+                    // Calculate the shift distance based on the center of the platforms
+                    double currentPlatformCenter = rectangles[i - 1].getLayoutX() + rectangles[i - 1].getWidth() / 2;
+                    double nextPlatformCenter = rectangles[i].getLayoutX() + rectangles[i].getWidth() / 2;
+                    double shiftDistance = nextPlatformCenter - currentPlatformCenter;
 
                     // Shift all rectangles and the player using TranslateTransition
                     for (int j = 0; j < rectangles.length; j++) {
@@ -113,23 +107,21 @@ public class GameControl {
                     }
 
                     TranslateTransition shiftPlayer = new TranslateTransition(Duration.millis(1000), Shero);
-                    shiftPlayer.setToX(Shero.getTranslateX() - shiftDistance+20);
+                    shiftPlayer.setToX(rectangles[i].getX());
                     shiftPlayer.play();
-                    stickLine.setHeight(20);
-                    stickLine.setRotate(0);
-                    TranslateTransition shiftStick = new TranslateTransition(Duration.millis(1000), stickLine);
-                    shiftStick.setToX(Shero.getTranslateX() - shiftDistance+17);
-                    shiftStick.play();
+                    Shero.setX(rectangles[i].getX());
+
+
                     // Update the Stickman's current and next platforms
                     stickman.Current_Platform = rectangles[i];
                     if (i < rectangles.length - 1) {
+
                         stickman.Next_Platform = rectangles[i + 1];
-
-
-
-
-
-
+                        stickLine.setHeight(0);
+                        stickLine.setRotate(0);
+                        TranslateTransition shiftStick = new TranslateTransition(Duration.millis(1000), stickLine);
+                        shiftStick.setToX(rectangles[i].getX());
+                        shiftStick.play();
                     } else {
                         stickman.Next_Platform = null;
                     }
@@ -139,20 +131,24 @@ public class GameControl {
 
             if (!isOnPlatform) {
                 // Stickman is not on any platform, initiate downward movement
-                fall();
+                TranslateTransition shiftPlayer1 = new TranslateTransition(Duration.millis(1000), Shero);
+                shiftPlayer1.setToX(stickLine.getHeight()+3);
+                shiftPlayer1.play();
+                shiftPlayer1.setOnFinished(eve-> {
+                    // After reaching the end of the stick, initiate the actual fall
+                    TranslateTransition fallDown = new TranslateTransition(Duration.millis(500), Shero);
+                    fallDown.setByY(250); // Adjust the value as needed for the downward fall
+                    fallDown.setCycleCount(1);
+                    fallDown.play();});
             }
         });
 
         move.play();
-
     }
 
-    public void fall() {
-        TranslateTransition fallDown = new TranslateTransition(Duration.millis(1000), Shero);
-        fallDown.setByY(250); // Adjust the value as needed for the downward fall
-        fallDown.setCycleCount(1);
-        fallDown.play();
-    }
+
+
+
 
     public void Pause(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("/com/example/ap_project/Pause.fxml"));

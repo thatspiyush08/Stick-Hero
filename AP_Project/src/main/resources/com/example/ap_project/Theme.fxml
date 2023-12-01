@@ -5,19 +5,24 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 
-<AnchorPane fx:id="anchorPane" onMousePressed="#extendStick" onMouseReleased="#rotateStick" prefHeight="522.0" prefWidth="1105.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.GameControl">
+<AnchorPane fx:id="anchorPane" onMousePressed="#extendStick" onMouseReleased="#rotateStick" prefHeight="468.0" prefWidth="1002.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.GameControl">
    <children>
       <ImageView fitHeight="529.0" fitWidth="1150.0" layoutX="-9.0" layoutY="-7.0">
          <image>
             <Image url="@finalTheme.png" />
          </image>
       </ImageView>
+      <ImageView fitHeight="537.0" fitWidth="1142.0" layoutY="-3.0">
+         <image>
+            <Image url="@finalthemef.png" />
+         </image>
+      </ImageView>
+      <Rectangle fx:id="stickLine" arcHeight="5.0" arcWidth="5.0" fill="#1d1e1e" layoutX="250.0" layoutY="355.0" stroke="BLACK" strokeType="INSIDE" width="4.0" />
       <ImageView fx:id="Shero" fitHeight="52.0" fitWidth="51.0" layoutX="201.0" layoutY="305.0">
          <image>
             <Image url="@Player.png" />
          </image>
       </ImageView>
       <Button fx:id="Pause" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" onAction="#Pause" prefHeight="52.0" prefWidth="62.0" style="-fx-opacity: 0;" text="Button" />
-      <Rectangle fx:id="stickLine" arcHeight="5.0" arcWidth="5.0" fill="#1d1e1e" layoutX="250.0" layoutY="355.0" stroke="BLACK" strokeType="INSIDE" width="4.0" />
    </children>
 </AnchorPane>

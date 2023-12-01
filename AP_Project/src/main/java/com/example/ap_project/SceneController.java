@@ -44,8 +44,8 @@ public class SceneController {
         for (int i = 0; i < 2000; i++) {
             rectangles[i] = new Rectangle();
             rectangles[i].setWidth(Math.random() * 50 + 50);
-            rectangles[i].setHeight(111);
-            rectangles[i].setLayoutY(410-(rectangles[i].getHeight()/2));
+            rectangles[i].setHeight(135);
+            rectangles[i].setLayoutY(425-(rectangles[i].getHeight()/2));
             rectangles[i].setLayoutX(xPosition);
 
             xPosition += gapWidth; // Adjust the gap width as needed
