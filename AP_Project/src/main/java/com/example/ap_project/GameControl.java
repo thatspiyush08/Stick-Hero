@@ -1,9 +1,6 @@
 package com.example.ap_project;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.RotateTransition;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -132,15 +129,23 @@ public class GameControl {
             if (!isOnPlatform) {
                 // Stickman is not on any platform, initiate downward movement
                 TranslateTransition shiftPlayer1 = new TranslateTransition(Duration.millis(1000), Shero);
-                shiftPlayer1.setToX(stickLine.getHeight()+3);
+                shiftPlayer1.setToX(stickLine.getHeight()+30);
                 shiftPlayer1.play();
                 shiftPlayer1.setOnFinished(eve-> {
                     // After reaching the end of the stick, initiate the actual fall
-                    TranslateTransition fallDown = new TranslateTransition(Duration.millis(500), Shero);
-                    fallDown.setByY(250); // Adjust the value as needed for the downward fall
-                    fallDown.setCycleCount(1);
-                    fallDown.play();});
-            }
+                TranslateTransition falldown = new TranslateTransition(Duration.millis(500),Shero);
+                falldown.setByY(131);
+                RotateTransition somersault = new RotateTransition(Duration.millis(500), Shero);
+                somersault.setByAngle(360); // 360-degree rotation
+                somersault.setCycleCount(1);
+
+                    ParallelTransition pT = new ParallelTransition(falldown,somersault);
+//                    fallDown.setByY(250); // Adjust the value as needed for the downward fall
+//                    fallDown.setCycleCount(1);
+
+                    pT.play();
+
+            });}
         });
 
         move.play();
