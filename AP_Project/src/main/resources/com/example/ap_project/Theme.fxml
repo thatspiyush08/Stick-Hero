@@ -18,7 +18,7 @@
          </image>
       </ImageView>
       <Rectangle fx:id="stickLine" arcHeight="5.0" arcWidth="5.0" fill="#1d1e1e" layoutX="250.0" layoutY="355.0" stroke="BLACK" strokeType="INSIDE" width="4.0" />
-      <ImageView fx:id="Shero" fitHeight="52.0" fitWidth="51.0" layoutX="201.0" layoutY="305.0">
+      <ImageView fx:id="Shero" fitHeight="41.0" fitWidth="41.0" layoutX="201.0" layoutY="316.0">
          <image>
             <Image url="@Player.png" />
          </image>

@@ -35,7 +35,7 @@ public class HelloApplication extends Application {
         root = fxmlLoader.load();
         Scene scene = new Scene(root, 1100, 630);
 
-        stage.setTitle("Made with loves by Ayaan & Piyush");
+        stage.setTitle("Made with love by Ayaan & Piyush");
         stage.setScene(scene);
 
         stage.show();
@@ -47,5 +47,6 @@ public class HelloApplication extends Application {
 
     public static void main(String[] args) {
         launch();
+
     }
 }
