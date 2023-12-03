@@ -124,6 +124,7 @@ public class GameControl {
                     }
                     break;
                 }
+
             }
 
             if (!isOnPlatform) {
