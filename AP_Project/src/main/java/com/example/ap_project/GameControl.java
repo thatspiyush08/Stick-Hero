@@ -142,6 +142,7 @@ public class GameControl {
                     ParallelTransition pT = new ParallelTransition(falldown,somersault);
 //                    fallDown.setByY(250); // Adjust the value as needed for the downward fall
 //                    fallDown.setCycleCount(1);
+                    //ctr=0;
 
                     pT.play();
 
