@@ -1,9 +1,6 @@
 package com.example.ap_project;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.RotateTransition;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -90,13 +87,13 @@ public class GameControl {
         move.setOnFinished(event -> {
             boolean isOnPlatform = false;
             for (int i = 1; i < rectangles.length; i++) {
-                if (350 - 40 <= stickLine.getHeight() && (320+ rectangles[i].getWidth() >= stickLine.getHeight())) {
+                if (350 - 40 <= stickLine.getHeight() && (350+ rectangles[i].getWidth() >= stickLine.getHeight())) {
                     // Stickman is on the platform
                     isOnPlatform = true;
 
                     // Calculate the shift distance based on the center of the platforms
-                    double currentPlatformCenter = rectangles[i - 1].getLayoutX() ;
-                    double nextPlatformCenter = rectangles[i].getLayoutX();
+                    double currentPlatformCenter = rectangles[i - 1].getLayoutX() + rectangles[i - 1].getWidth() / 2;
+                    double nextPlatformCenter = rectangles[i].getLayoutX() + rectangles[i].getWidth() / 2;
                     double shiftDistance = nextPlatformCenter - currentPlatformCenter;
 
                     // Shift all rectangles and the player using TranslateTransition
@@ -132,33 +129,32 @@ public class GameControl {
             if (!isOnPlatform) {
                 // Stickman is not on any platform, initiate downward movement
                 TranslateTransition shiftPlayer1 = new TranslateTransition(Duration.millis(1000), Shero);
-                shiftPlayer1.setToX(stickLine.getHeight()+3);
+                shiftPlayer1.setToX(stickLine.getHeight()+30);
                 shiftPlayer1.play();
                 shiftPlayer1.setOnFinished(eve-> {
                     // After reaching the end of the stick, initiate the actual fall
-                    TranslateTransition fallDown = new TranslateTransition(Duration.millis(500), Shero);
-                    fallDown.setByY(250); // Adjust the value as needed for the downward fall
-                    fallDown.setCycleCount(1);
-                    fallDown.play();});
-            }
+                TranslateTransition falldown = new TranslateTransition(Duration.millis(500),Shero);
+                falldown.setByY(131);
+                RotateTransition somersault = new RotateTransition(Duration.millis(500), Shero);
+                somersault.setByAngle(360); // 360-degree rotation
+                somersault.setCycleCount(1);
+
+                    ParallelTransition pT = new ParallelTransition(falldown,somersault);
+//                    fallDown.setByY(250); // Adjust the value as needed for the downward fall
+//                    fallDown.setCycleCount(1);
+                    //ctr=0;
+                    //pst=0;
+
+                    pT.play();
+
+            });}
         });
 
         move.play();
     }
 
-    public void flip(ImageView Shero) {
-        double centerY = Shero.getLayoutY() + Shero.getBoundsInLocal().getHeight() / 2;
 
-        boolean isFlipped=true;
-        if (!isFlipped) {
-            Shero.setScaleY(-1); // Flip vertically
-            Shero.setLayoutY(centerY + (Shero.getBoundsInLocal().getHeight() / 2) - 7.0);
-        } else {
-            Shero.setScaleY(1); // Revert to normal
-            Shero.setLayoutY(centerY - (Shero.getBoundsInLocal().getHeight() / 2) -37.0 );
-        }
-        isFlipped = !isFlipped;
-    }
+
 
 
     public void Pause(ActionEvent event) throws IOException {
