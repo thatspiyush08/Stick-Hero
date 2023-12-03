@@ -87,13 +87,13 @@ public class GameControl {
         move.setOnFinished(event -> {
             boolean isOnPlatform = false;
             for (int i = 1; i < rectangles.length; i++) {
-                if (350 - 40 <= stickLine.getHeight() && (350+ rectangles[i].getWidth() >= stickLine.getHeight())) {
+                if (350 - 40 <= stickLine.getHeight() && (320+ rectangles[i].getWidth() >= stickLine.getHeight())) {
                     // Stickman is on the platform
                     isOnPlatform = true;
 
                     // Calculate the shift distance based on the center of the platforms
-                    double currentPlatformCenter = rectangles[i - 1].getLayoutX() + rectangles[i - 1].getWidth() / 2;
-                    double nextPlatformCenter = rectangles[i].getLayoutX() + rectangles[i].getWidth() / 2;
+                    double currentPlatformCenter = rectangles[i - 1].getLayoutX();
+                    double nextPlatformCenter = rectangles[i].getLayoutX();
                     double shiftDistance = nextPlatformCenter - currentPlatformCenter;
 
                     // Shift all rectangles and the player using TranslateTransition
