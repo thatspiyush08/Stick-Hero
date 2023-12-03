@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 
 import java.io.IOException;
+import java.util.Random;
 
 
 public class SceneController {
@@ -36,6 +37,9 @@ public class SceneController {
 //        rectangles = new CustomRectangle[2000];
         double xPosition = 213;
         double gapWidth = 450;
+        Random random = new Random();
+
+        // Generate a random number between -0.5 and 1
 
         rectangles = new Rectangle[2000];
         xPosition = 208;
@@ -43,6 +47,7 @@ public class SceneController {
         Group G1 = new Group();
         for (int i = 0; i < 2000; i++) {
             rectangles[i] = new Rectangle();
+            double randomNumber = random.nextDouble() * 1.5 - 0.5;
             rectangles[i].setWidth(Math.random() * 50 + 50);
             rectangles[i].setHeight(135);
             rectangles[i].setLayoutY(425-(rectangles[i].getHeight()/2));
@@ -58,5 +63,7 @@ public class SceneController {
         stage.setScene(scene);
         stage.show();
     }
+
+
 
 }
