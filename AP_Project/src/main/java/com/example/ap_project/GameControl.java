@@ -9,6 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -39,6 +41,7 @@ public class GameControl {
     private Rectangle stickLine;
 
     private Timeline timeline;
+    private boolean isFlipped = false;
 
     @FXML
     private ImageView Shero;
@@ -93,7 +96,18 @@ public class GameControl {
             movement();
         });
     }
+    public void flipHero(ImageView Shero) {
+        double centerY = Shero.getLayoutY() + Shero.getBoundsInLocal().getHeight() / 2;
 
+        if (!isFlipped) {
+            Shero.setScaleY (-1); // Flip vertically
+            Shero.setLayoutY(centerY + (Shero.getBoundsInLocal().getHeight() / 2)-7.0 );
+        } else {
+            Shero.setScaleY(1); // Revert to normal
+            Shero.setLayoutY(centerY - (Shero.getBoundsInLocal().getHeight() / 2)-34.0);
+        }
+        isFlipped = !isFlipped;
+    }
     public void movement() {
         TranslateTransition move = new TranslateTransition(Duration.millis(1000), Shero);
         move.setCycleCount(1);
@@ -175,6 +189,11 @@ public class GameControl {
 
         move.play();
 
+    }
+    public void handleKeyPress(KeyEvent event) {
+        if (event.getCode() == KeyCode.F) {
+            flipHero(Shero);
+        }
     }
 
     public void Pause(ActionEvent event) throws IOException {
