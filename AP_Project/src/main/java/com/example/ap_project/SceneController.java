@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -13,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 
@@ -24,6 +27,7 @@ public class SceneController {
     @FXML
     private javafx.scene.layout.AnchorPane AnchorPane;
     public static   Rectangle[] rectangles;
+    public static ImageView[] cherries = new ImageView[50];
 
 
 
@@ -38,6 +42,7 @@ public class SceneController {
         double xPosition = 213;
         double gapWidth = 450;
         Random random = new Random();
+
 
         // Generate a random number between -0.5 and 1
 
@@ -56,7 +61,40 @@ public class SceneController {
             xPosition += gapWidth; // Adjust the gap width as needed
             G1.getChildren().add(rectangles[i]);
         }
+        int num=350;
         ((Pane)root).getChildren().add(G1);
+        for (int i = 0; i < 50; i++) {
+            cherries[i] = new ImageView();
+            String imagePath = "/com/example/ap_project/Cherry.png";
+            InputStream stream = getClass().getResourceAsStream(imagePath);
+
+            if (stream != null) {
+                Image image = new Image(stream);
+                cherries[i].setImage(image);
+
+                cherries[i].setFitWidth(41);
+                cherries[i].setFitHeight(41);
+
+                // Ensure the index is within bounds
+                int index = i < rectangles.length ? i : rectangles.length - 1;
+                Random random2=new Random();
+                double randi=random2.nextDouble()*1.5-0.5;
+
+                double randomX = num + randi * 100;
+                double randomY = rectangles[index].getLayoutY() - cherries[i].getFitHeight();
+
+                cherries[i].setLayoutX(randomX);
+                cherries[i].setLayoutY(355);
+                cherries[i].opacityProperty().setValue(0);
+
+                ((Pane)root).getChildren().add(cherries[i]); // Add cherries to the root
+            } else {
+                System.err.println("Image file not found: " + imagePath);
+            }
+            num+=350;
+        }
+
+
 
         stage=(Stage)((Node)event.getSource()).getScene().getWindow();
 

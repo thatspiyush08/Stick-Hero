@@ -7,14 +7,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.layout.Pane;
-import java.io.IOException;
 
-import static com.example.ap_project.SceneController.rectangles;
+import java.io.IOException;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import static com.example.ap_project.SceneController.*;
+import static com.example.ap_project.SceneController.cherries;
 
 public class GameControl {
     private Stickman stickman;
@@ -31,17 +35,33 @@ public class GameControl {
     @FXML
     private Rectangle Platform2;
 
-
-
     @FXML
     private Rectangle stickLine;
+
     private Timeline timeline;
+
     @FXML
     private ImageView Shero;
-    int flag = 0;
+    @FXML
+    private Label CherryLabel;
+    @FXML
+    private Label ScoreLabel;
 
-    double sticklenght=0;
+    int flag = 0;
+    int score=0;
+    double stickLength = 0;
     private boolean extending = false;
+
+    private void setCherriesOpacity(int platformIndex) {
+        // Generate a new random number for each platform
+        Random random = new Random();
+        int randomNumber = random.nextInt(2);
+        System.out.println(randomNumber);
+        if (randomNumber==0){
+            cherries[platformIndex].setOpacity(1);
+        }
+        }
+
 
     public void extendStick() {
         if (!extending) {
@@ -50,19 +70,15 @@ public class GameControl {
                 double currentLength = stickLine.getHeight();
                 double newLength = currentLength + 20; // Increase the length by a larger amount
                 stickLine.setHeight(newLength);
-                sticklenght=newLength;
+                stickLength = newLength;
                 stickLine.setTranslateY(-newLength + 20);
             }));
             timeline.setCycleCount(Timeline.INDEFINITE);
-//            timeline.setOnFinished(event -> extending = false);
             timeline.play();
-
         }
     }
 
-
     public void rotateStick() {
-
         timeline.pause();
         extending = false;
         stickLine.setRotate(0);
@@ -75,9 +91,7 @@ public class GameControl {
 
         rotateTransition.setOnFinished(event -> {
             movement();
-            //    extendStick();  // Call extendStick after the stick
         });
-
     }
 
     public void movement() {
@@ -86,81 +100,85 @@ public class GameControl {
 
         move.setOnFinished(event -> {
             boolean isOnPlatform = false;
+            int platformIndex = -1;
+
             for (int i = 1; i < rectangles.length; i++) {
-                if (350 - 40 <= stickLine.getHeight() && (320+ rectangles[i].getWidth() >= stickLine.getHeight())) {
-                    // Stickman is on the platform
+                if (350 - 40 <= stickLine.getHeight() && (320 + rectangles[i].getWidth() >= stickLine.getHeight())) {
                     isOnPlatform = true;
-
-                    // Calculate the shift distance based on the center of the platforms
-                    double currentPlatformCenter = rectangles[i - 1].getLayoutX();
-                    double nextPlatformCenter = rectangles[i].getLayoutX();
-                    double shiftDistance = nextPlatformCenter - currentPlatformCenter;
-
-                    // Shift all rectangles and the player using TranslateTransition
-                    for (int j = 0; j < rectangles.length; j++) {
-                        TranslateTransition shiftRectangle = new TranslateTransition(Duration.millis(1000), rectangles[j]);
-                        shiftRectangle.setToX(rectangles[j].getTranslateX() - shiftDistance);
-                        shiftRectangle.play();
-                    }
-
-                    TranslateTransition shiftPlayer = new TranslateTransition(Duration.millis(1000), Shero);
-                    shiftPlayer.setToX(rectangles[i].getX());
-                    shiftPlayer.play();
-                    Shero.setX(rectangles[i].getX());
-
-
-                    // Update the Stickman's current and next platforms
-                    stickman.Current_Platform = rectangles[i];
-                    if (i < rectangles.length - 1) {
-
-                        stickman.Next_Platform = rectangles[i + 1];
-                        stickLine.setHeight(0);
-                        stickLine.setRotate(0);
-                        TranslateTransition shiftStick = new TranslateTransition(Duration.millis(1000), stickLine);
-                        shiftStick.setToX(rectangles[i].getX());
-                        shiftStick.play();
-                    } else {
-                        stickman.Next_Platform = null;
-                    }
+                    platformIndex = i;
                     break;
                 }
-
             }
 
-            if (!isOnPlatform) {
-                // Stickman is not on any platform, initiate downward movement
+            if (isOnPlatform) {
+                score++;
+
+                setCherriesOpacity(score);
+
+                double currentPlatformCenter = rectangles[platformIndex - 1].getLayoutX();
+                double nextPlatformCenter = rectangles[platformIndex].getLayoutX();
+                double shiftDistance = nextPlatformCenter - currentPlatformCenter;
+
+                for (int j = 0; j < rectangles.length; j++) {
+                    TranslateTransition shiftRectangle = new TranslateTransition(Duration.millis(1000), rectangles[j]);
+                    shiftRectangle.setToX(rectangles[j].getTranslateX() - shiftDistance);
+                    shiftRectangle.play();
+                }
+
+                // Translate cherries along with the platforms
+                for (ImageView cherry : cherries) {
+                    TranslateTransition shiftCherry = new TranslateTransition(Duration.millis(1000), cherry);
+                    shiftCherry.setToX(cherry.getTranslateX() - shiftDistance);
+                    shiftCherry.play();
+                }
+
+                TranslateTransition shiftPlayer = new TranslateTransition(Duration.millis(1000), Shero);
+                shiftPlayer.setToX(rectangles[platformIndex].getX());
+                shiftPlayer.play();
+                Shero.setX(rectangles[platformIndex].getX());
+
+                stickman.Current_Platform = rectangles[platformIndex];
+                if (platformIndex < rectangles.length - 1) {
+                    stickman.Next_Platform = rectangles[platformIndex + 1];
+                    stickLine.setHeight(0);
+                    stickLine.setRotate(0);
+                    TranslateTransition shiftStick = new TranslateTransition(Duration.millis(1000), stickLine);
+                    shiftStick.setToX(rectangles[platformIndex].getX());
+                    shiftStick.play();
+
+                    // Generate a new random number for each platform
+                    Random random = new Random();
+                    int randomNumber = random.nextInt(2);
+                    ScoreLabel.setText("Score: " + score);
+
+
+
+                } else {
+                    stickman.Next_Platform = null;
+                }
+            } else {
                 TranslateTransition shiftPlayer1 = new TranslateTransition(Duration.millis(1000), Shero);
-                shiftPlayer1.setToX(stickLine.getHeight()+30);
+                shiftPlayer1.setToX(stickLine.getHeight() + 30);
                 shiftPlayer1.play();
-                shiftPlayer1.setOnFinished(eve-> {
-                    // After reaching the end of the stick, initiate the actual fall
-                TranslateTransition falldown = new TranslateTransition(Duration.millis(500),Shero);
-                falldown.setByY(131);
-                RotateTransition somersault = new RotateTransition(Duration.millis(500), Shero);
-                somersault.setByAngle(360); // 360-degree rotation
-                somersault.setCycleCount(1);
+                shiftPlayer1.setOnFinished(eve -> {
+                    TranslateTransition falldown = new TranslateTransition(Duration.millis(500), Shero);
+                    falldown.setByY(131);
+                    RotateTransition somersault = new RotateTransition(Duration.millis(500), Shero);
+                    somersault.setByAngle(360);
+                    somersault.setCycleCount(1);
 
-                    ParallelTransition pT = new ParallelTransition(falldown,somersault);
-//                    fallDown.setByY(250); // Adjust the value as needed for the downward fall
-//                    fallDown.setCycleCount(1);
-                    //ctr=0;
-                    //pst=0;
-
+                    ParallelTransition pT = new ParallelTransition(falldown, somersault);
                     pT.play();
-
-            });}
+                });
+            }
         });
 
         move.play();
+
     }
-
-
-
-
 
     public void Pause(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("/com/example/ap_project/Pause.fxml"));
-
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);

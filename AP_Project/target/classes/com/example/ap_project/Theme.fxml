@@ -7,12 +7,7 @@
 
 <AnchorPane fx:id="anchorPane" onMousePressed="#extendStick" onMouseReleased="#rotateStick" prefHeight="468.0" prefWidth="1002.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.GameControl">
    <children>
-      <ImageView fitHeight="529.0" fitWidth="1150.0" layoutX="-9.0" layoutY="-7.0">
-         <image>
-            <Image url="@finalTheme.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="537.0" fitWidth="1142.0" layoutY="-3.0">
+      <ImageView fx:id="scoreLabel" fitHeight="537.0" fitWidth="1142.0" layoutY="-3.0">
          <image>
             <Image url="@finalthemef.png" />
          </image>
@@ -24,5 +19,13 @@
          </image>
       </ImageView>
       <Button fx:id="Pause" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" onAction="#Pause" prefHeight="52.0" prefWidth="62.0" style="-fx-opacity: 0;" text="Button" />
+      <Label fx:id="ScoreLabel" layoutX="1023.0" layoutY="73.0" prefHeight="41.0" prefWidth="91.0" text="Score: 0" />
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="319.0" layoutY="116.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fitHeight="41.0" fitWidth="41.0" layoutX="910.0" layoutY="73.0">
+         <image>
+            <Image url="@Cherry.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="CherryLabel" layoutX="951.0" layoutY="79.0" prefHeight="29.0" prefWidth="48.0" text="0" />
    </children>
 </AnchorPane>
