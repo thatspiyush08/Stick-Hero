@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.util.Random;
 
 
+
+
 public class SceneController {
     private Stage stage;
     private Scene scene;
@@ -28,6 +30,8 @@ public class SceneController {
     private javafx.scene.layout.AnchorPane AnchorPane;
     public static   Rectangle[] rectangles;
     public static ImageView[] cherries = new ImageView[50];
+
+
 
 
 
@@ -94,10 +98,25 @@ public class SceneController {
             num+=350;
         }
 
-
-
         stage=(Stage)((Node)event.getSource()).getScene().getWindow();
 
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
+    public void Exit(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("/com/example/ap_project/HomeScreen.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void Resume(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("/com/example/ap_project/Theme.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }

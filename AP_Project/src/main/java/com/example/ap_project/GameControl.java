@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -23,6 +24,8 @@ import static com.example.ap_project.SceneController.*;
 import static com.example.ap_project.SceneController.cherries;
 
 public class GameControl {
+
+
     private Stickman stickman;
     private Stage stage;
     private Scene scene;
@@ -52,15 +55,19 @@ public class GameControl {
 
     int flag = 0;
     int score=0;
+    int cherryCount=0;
     double stickLength = 0;
     private boolean extending = false;
+    int platformFlag=0;
+    @FXML
+    private Button pause;
 
     private void setCherriesOpacity(int platformIndex) {
-        // Generate a new random number for each platform
+
         Random random = new Random();
         int randomNumber = random.nextInt(2);
         System.out.println(randomNumber);
-        if (randomNumber==0){
+        if (randomNumber==1){
             cherries[platformIndex].setOpacity(1);
         }
         }
@@ -79,6 +86,7 @@ public class GameControl {
             timeline.setCycleCount(Timeline.INDEFINITE);
             timeline.play();
         }
+
     }
 
     public void rotateStick() {
@@ -91,26 +99,51 @@ public class GameControl {
         RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.1), stickLine);
         rotateTransition.setByAngle(90);
         rotateTransition.play();
-
+        platformFlag=1;
         rotateTransition.setOnFinished(event -> {
             movement();
         });
     }
-    public void flipHero(ImageView Shero) {
+    public void flipHero(ImageView Shero, int score) {
         double centerY = Shero.getLayoutY() + Shero.getBoundsInLocal().getHeight() / 2;
 
-        if (!isFlipped) {
-            Shero.setScaleY (-1); // Flip vertically
-            Shero.setLayoutY(centerY + (Shero.getBoundsInLocal().getHeight() / 2)-7.0 );
-        } else {
+        if (isFlipped) {
             Shero.setScaleY(1); // Revert to normal
-            Shero.setLayoutY(centerY - (Shero.getBoundsInLocal().getHeight() / 2)-34.0);
+            Shero.setLayoutY(centerY - (Shero.getBoundsInLocal().getHeight() / 2) - 34.0);
+        } else {
+            Shero.setScaleY(-1); // Flip vertically
+            Shero.setLayoutY(centerY + (Shero.getBoundsInLocal().getHeight() / 2) - 7.0);
         }
         isFlipped = !isFlipped;
-    }
+
+        // Check if player is flipped and update cherry opacity
+        if (isFlipped) {
+            double playerXLayout = Shero.getLayoutX() + Shero.getBoundsInLocal().getWidth() / 2;
+            double playerYLayout = Shero.getLayoutY() + Shero.getBoundsInLocal().getHeight() / 2;
+
+            // Iterate over cherries to check conditions
+//            for (int i = 0; i < cherries.length; i++) {
+//                ImageView cherry = cherries[i];
+                double cherryXLayout = cherries[score].getLayoutX() + cherries[score].getBoundsInLocal().getWidth() / 2;
+                double cherryYLayout = cherries[score].getLayoutY() + cherries[score].getBoundsInLocal().getHeight() / 2;
+//            System.out.println(Math.abs(playerXLayout - cherries[score].getLayoutX()));
+                // Check conditions for opacity change using bounding boxes
+                if (cherries[score].getOpacity() == 1 && Math.abs(playerXLayout - cherries[score].getLayoutX()) < 5
+                        && Math.abs(playerYLayout - cherryYLayout) < 5) {
+                    cherries[score].setOpacity(0);
+                    cherryCount++;
+                    CherryLabel.setText("Cherries: " + cherryCount);
+                }
+            }
+        }
+
+
+
     public void movement() {
         TranslateTransition move = new TranslateTransition(Duration.millis(1000), Shero);
+
         move.setCycleCount(1);
+
 
         move.setOnFinished(event -> {
             boolean isOnPlatform = false;
@@ -137,6 +170,27 @@ public class GameControl {
                     TranslateTransition shiftRectangle = new TranslateTransition(Duration.millis(1000), rectangles[j]);
                     shiftRectangle.setToX(rectangles[j].getTranslateX() - shiftDistance);
                     shiftRectangle.play();
+                    int i=j;
+                    Timeline checkPlatform=new Timeline((new KeyFrame(Duration.millis(1), Event -> {
+                        if (Shero.getBoundsInParent().intersects(rectangles[i].getBoundsInParent()) && isFlipped )
+                        {
+//                            System.out.println("yes");
+                            TranslateTransition falldown = new TranslateTransition(Duration.millis(500), Shero);
+                            falldown.setByY(131);
+                            RotateTransition somersault = new RotateTransition(Duration.millis(500), Shero);
+                            somersault.setByAngle(360);
+                            somersault.setCycleCount(1);
+
+                            ParallelTransition pT = new ParallelTransition(falldown, somersault);
+                            pT.play();
+
+
+                        }
+
+                    })));
+                    checkPlatform.setCycleCount(Timeline.INDEFINITE);
+                    checkPlatform.play();
+
                 }
 
                 // Translate cherries along with the platforms
@@ -144,12 +198,28 @@ public class GameControl {
                     TranslateTransition shiftCherry = new TranslateTransition(Duration.millis(1000), cherry);
                     shiftCherry.setToX(cherry.getTranslateX() - shiftDistance);
                     shiftCherry.play();
+
+                    Timeline Check = new Timeline((new KeyFrame(Duration.millis(10), Event -> {
+                        if (Shero.getBoundsInParent().intersects(cherries[score-1].getBoundsInParent()) && isFlipped && cherries[score-1].getOpacity() == 1)
+                        {
+                            cherries[score-1].setOpacity(0);
+                            cherryCount += 1;
+                            CherryLabel.setText(String.valueOf(cherryCount));
+                        }
+
+                    })));
+                    Check.setCycleCount(Timeline.INDEFINITE);
+                    Check.play();
                 }
 
                 TranslateTransition shiftPlayer = new TranslateTransition(Duration.millis(1000), Shero);
                 shiftPlayer.setToX(rectangles[platformIndex].getX());
                 shiftPlayer.play();
+
+
+
                 Shero.setX(rectangles[platformIndex].getX());
+
 
                 stickman.Current_Platform = rectangles[platformIndex];
                 if (platformIndex < rectangles.length - 1) {
@@ -160,12 +230,12 @@ public class GameControl {
                     shiftStick.setToX(rectangles[platformIndex].getX());
                     shiftStick.play();
 
-                    // Generate a new random number for each platform
+                    // Check if isFlipped is true and update cherry opacity
+
+
                     Random random = new Random();
                     int randomNumber = random.nextInt(2);
                     ScoreLabel.setText("Score: " + score);
-
-
 
                 } else {
                     stickman.Next_Platform = null;
@@ -174,6 +244,19 @@ public class GameControl {
                 TranslateTransition shiftPlayer1 = new TranslateTransition(Duration.millis(1000), Shero);
                 shiftPlayer1.setToX(stickLine.getHeight() + 30);
                 shiftPlayer1.play();
+
+                Timeline Check = new Timeline((new KeyFrame(Duration.millis(10), Event -> {
+                    if (Shero.getBoundsInParent().intersects(cherries[score].getBoundsInParent()) && isFlipped && cherries[score].getOpacity() == 1)
+                    {
+                        cherries[score].setOpacity(0);
+//                        cherryCount += 1;
+//                        CherryLabel.setText(String.valueOf(cherryCount));
+                    }
+
+                })));
+                Check.setCycleCount(Timeline.INDEFINITE);
+                Check.play();
+
                 shiftPlayer1.setOnFinished(eve -> {
                     TranslateTransition falldown = new TranslateTransition(Duration.millis(500), Shero);
                     falldown.setByY(131);
@@ -188,11 +271,12 @@ public class GameControl {
         });
 
         move.play();
-
     }
+
     public void handleKeyPress(KeyEvent event) {
         if (event.getCode() == KeyCode.F) {
-            flipHero(Shero);
+//            System.out.println(score);
+            flipHero(Shero,score);
         }
     }
 
@@ -203,4 +287,5 @@ public class GameControl {
         stage.setScene(scene);
         stage.show();
     }
+
 }

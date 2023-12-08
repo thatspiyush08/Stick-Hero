@@ -27,7 +27,8 @@ public class HelloApplication extends Application {
     private int screenCounter = 0;
     Parent root;
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws IOException
+    {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/com/example/ap_project/HomeScreen.fxml"));
 
         String path = "/home/piyush/SEM3/AP/Stick-Hero/AP_Project/src/main/resources/com/example/ap_project/Georges-Lament-Go-By-Ocean-Ryan1.mp3/";
