@@ -3,6 +3,7 @@ package com.example.ap_project;
         import javafx.animation.*;
         import javafx.event.ActionEvent;
         import javafx.fxml.FXML;
+        import java.io.Serializable;
         import javafx.fxml.FXMLLoader;
         import javafx.scene.Node;
         import javafx.scene.Parent;
@@ -24,13 +25,14 @@ package com.example.ap_project;
         import static com.example.ap_project.SceneController.*;
         import static com.example.ap_project.SceneController.cherries;
 
-public class GameControl {
+public class GameControl implements Serializable {
 
     @FXML
     private AnchorPane FallPane;
 
     @FXML
     private Label MYSCORE;
+    private static final long serialVersionUID = 1L;
 
     @FXML
     private Label HIGHSCORE;
@@ -91,6 +93,14 @@ public class GameControl {
     int platformFlag=0;
     @FXML
     private Button pause;
+    private static GameControl instance;
+
+    public static GameControl getInstance() {   //SINGLETON DESIGN PATTERN USED IN GAME CONTROL!
+        if (instance == null) {
+            instance = new GameControl();
+        }
+        return instance;
+    }
 
     private void setCherriesOpacity(int platformIndex) {
 
@@ -102,7 +112,12 @@ public class GameControl {
         }
     }
 
-
+    public int getScore() {
+        return score;
+    }
+    public int getCherrycount() {
+        return cherryCount;
+    }
     public void extendStick() {
         if (!extending) {
             extending = true;
@@ -393,6 +408,14 @@ public class GameControl {
         PAUSELABLE.setText(s);
         PAUSEPANE.toFront();
     }
+    public void setCherryCount(int ccount) {
+        this.cherryCount=cherryCount;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
 
     public void Restar(ActionEvent event) throws IOException{
         SceneController sc= new SceneController();
@@ -408,7 +431,7 @@ public class GameControl {
     }
 
     public void ReSpawn(){
-        if (cherryCount>=-100){
+        if (cherryCount>=3){
 
             String s= String.valueOf(score);
             String c= String.valueOf(cherryCount);
