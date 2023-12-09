@@ -1,29 +1,59 @@
 package com.example.ap_project;
 
-import javafx.animation.*;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
-import javafx.util.Duration;
+        import javafx.animation.*;
+        import javafx.event.ActionEvent;
+        import javafx.fxml.FXML;
+        import javafx.fxml.FXMLLoader;
+        import javafx.scene.Node;
+        import javafx.scene.Parent;
+        import javafx.scene.Scene;
+        import javafx.scene.control.Button;
+        import javafx.scene.control.Label;
+        import javafx.scene.image.ImageView;
+        import javafx.scene.input.KeyCode;
+        import javafx.scene.input.KeyEvent;
+        import javafx.scene.layout.AnchorPane;
+        import javafx.scene.shape.Rectangle;
+        import javafx.stage.Stage;
+        import javafx.util.Duration;
 
-import java.io.IOException;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+        import java.io.IOException;
+        import java.util.Random;
+        import java.util.concurrent.TimeUnit;
 
-import static com.example.ap_project.SceneController.*;
-import static com.example.ap_project.SceneController.cherries;
+        import static com.example.ap_project.SceneController.*;
+        import static com.example.ap_project.SceneController.cherries;
 
 public class GameControl {
+
+    @FXML
+    private AnchorPane FallPane;
+
+    @FXML
+    private Label MYSCORE;
+
+    @FXML
+    private Label HIGHSCORE;
+
+    @FXML
+    private Label CHERRYLABLE;
+
+    @FXML
+    private AnchorPane PAUSEPANE;
+    @FXML
+    private Button RESTART;
+
+    @FXML
+    private Button RESUME;
+
+    @FXML
+    private Button QUIT;
+
+    @FXML
+    private Button SAVE;
+    @FXML
+    private Label PAUSELABLE;
+
 
 
     private Stickman stickman;
@@ -70,7 +100,7 @@ public class GameControl {
         if (randomNumber==1){
             cherries[platformIndex].setOpacity(1);
         }
-        }
+    }
 
 
     public void extendStick() {
@@ -124,18 +154,18 @@ public class GameControl {
             // Iterate over cherries to check conditions
 //            for (int i = 0; i < cherries.length; i++) {
 //                ImageView cherry = cherries[i];
-                double cherryXLayout = cherries[score].getLayoutX() + cherries[score].getBoundsInLocal().getWidth() / 2;
-                double cherryYLayout = cherries[score].getLayoutY() + cherries[score].getBoundsInLocal().getHeight() / 2;
+            double cherryXLayout = cherries[score].getLayoutX() + cherries[score].getBoundsInLocal().getWidth() / 2;
+            double cherryYLayout = cherries[score].getLayoutY() + cherries[score].getBoundsInLocal().getHeight() / 2;
 //            System.out.println(Math.abs(playerXLayout - cherries[score].getLayoutX()));
-                // Check conditions for opacity change using bounding boxes
-                if (cherries[score].getOpacity() == 1 && Math.abs(playerXLayout - cherries[score].getLayoutX()) < 5
-                        && Math.abs(playerYLayout - cherryYLayout) < 5) {
-                    cherries[score].setOpacity(0);
-                    cherryCount++;
-                    CherryLabel.setText("Cherries: " + cherryCount);
-                }
+            // Check conditions for opacity change using bounding boxes
+            if (cherries[score].getOpacity() == 1 && Math.abs(playerXLayout - cherries[score].getLayoutX()) < 5
+                    && Math.abs(playerYLayout - cherryYLayout) < 5) {
+                cherries[score].setOpacity(0);
+                cherryCount++;
+                CherryLabel.setText("Cherries: " + cherryCount);
             }
         }
+    }
 
 
 
@@ -150,7 +180,7 @@ public class GameControl {
             int platformIndex = -1;
 
             for (int i = 1; i < rectangles.length; i++) {
-                if (350 - 40 <= stickLine.getHeight() && (280 + rectangles[i].getWidth() >= stickLine.getHeight())) {
+                if (350 - 40 <= stickLine.getHeight() && (285 + rectangles[i].getWidth() >= stickLine.getHeight())) {
                     isOnPlatform = true;
                     platformIndex = i;
                     break;
@@ -190,6 +220,7 @@ public class GameControl {
                     })));
                     checkPlatform.setCycleCount(Timeline.INDEFINITE);
                     checkPlatform.play();
+
 
                 }
 
@@ -289,11 +320,23 @@ public class GameControl {
 
                     ParallelTransition pT = new ParallelTransition(falldown, somersault);
                     pT.play();
+                    pT.setOnFinished(event1->{
+                        String s= String.valueOf(score);
+                        String c= String.valueOf(cherryCount);
+                        CHERRYLABLE.setText(c);
+                        MYSCORE.setText(s);
+                        FallPane.toFront();
+
+                    });
+
                 });
+
             }
         });
 
         move.play();
+
+
     }
 
     public void handleKeyPress(KeyEvent event) {
@@ -304,11 +347,36 @@ public class GameControl {
     }
 
     public void Pause(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("/com/example/ap_project/Pause.fxml"));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        String s= String.valueOf(score);
+        PAUSELABLE.setText(s);
+        PAUSEPANE.toFront();
     }
 
+    public void Restar(ActionEvent event) throws IOException{
+        SceneController sc= new SceneController();
+        sc.HomeToRunController(event);
+    }
+    public void Resum(ActionEvent event) throws IOException {
+        PAUSEPANE.toBack();
+    }
+
+    public void Quits(ActionEvent e) throws IOException{
+        SceneController sc= new SceneController();
+        sc.Exit(e);
+    }
+
+    public void ReSpawn(){
+        if (cherryCount>=3){
+
+            String s= String.valueOf(score);
+            String c= String.valueOf(cherryCount);
+            CHERRYLABLE.setText(c);
+            MYSCORE.setText(s);
+            cherryCount-=3;
+            String c1= String.valueOf(cherryCount);
+            CherryLabel.setText(c1);
+            FallPane.toBack();
+
+        }
+    }
 }

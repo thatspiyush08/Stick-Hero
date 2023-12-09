@@ -5,8 +5,37 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 
-<AnchorPane fx:id="anchorPane" onKeyPressed="#handleKeyPress" onMousePressed="#extendStick" onMouseReleased="#rotateStick" prefHeight="468.0" prefWidth="1002.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.GameControl">
+<AnchorPane fx:id="anchorPane" onKeyPressed="#handleKeyPress" onMousePressed="#extendStick" onMouseReleased="#rotateStick" prefHeight="517.0" prefWidth="1150.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ap_project.GameControl">
    <children>
+      <AnchorPane fx:id="FallPane" layoutX="-8.0" prefHeight="534.0" prefWidth="1156.0">
+         <children>
+            <ImageView fitHeight="571.0" fitWidth="1149.0" layoutY="-33.0">
+               <image>
+                  <Image url="@3.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="ReSTART" layoutX="484.0" layoutY="26.0" mnemonicParsing="false" onAction="#Restar" opacity="0.0" prefHeight="66.0" prefWidth="152.0" text="Button" />
+            <Button fx:id="QuIT" layoutX="353.0" layoutY="380.0" mnemonicParsing="false" onAction="#Quits" opacity="0.0" prefHeight="52.0" prefWidth="124.0" text="Button" />
+            <Button fx:id="RESPAWN" layoutX="686.0" layoutY="380.0" mnemonicParsing="false" onAction="#ReSpawn" opacity="0.0" prefHeight="52.0" prefWidth="124.0" text="Button" />
+            <Label fx:id="MYSCORE" layoutX="491.0" layoutY="283.0" text="0" />
+            <Label fx:id="HIGHSCORE" layoutX="763.0" layoutY="278.0" text="0" />
+            <Label fx:id="CHERRYLABLE" layoutX="1058.0" text="0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="PAUSEPANE" prefHeight="534.0" prefWidth="1128.0">
+         <children>
+            <ImageView fitHeight="603.0" fitWidth="1142.0" layoutY="-69.0">
+               <image>
+                  <Image url="@4.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="RESTART" layoutX="391.0" layoutY="236.0" mnemonicParsing="false" onAction="#Restar" opacity="0.0" prefHeight="29.0" prefWidth="177.0" text="Button" />
+            <Button fx:id="SAVE" layoutX="587.0" layoutY="236.0" mnemonicParsing="false" opacity="0.0" prefHeight="29.0" prefWidth="170.0" text="Button" />
+            <Button fx:id="RESUME" layoutX="391.0" layoutY="282.0" mnemonicParsing="false" onAction="#Resum" opacity="0.0" prefHeight="29.0" prefWidth="177.0" text="Button" />
+            <Button fx:id="QUIT" layoutX="587.0" layoutY="282.0" mnemonicParsing="false" onAction="#Quits" opacity="0.0" prefHeight="29.0" prefWidth="170.0" text="Button" />
+            <Label fx:id="PAUSELABLE" layoutX="624.0" layoutY="31.0" prefHeight="16.0" prefWidth="4.0" text="0" />
+         </children>
+      </AnchorPane>
       <ImageView fx:id="scoreLabel" fitHeight="537.0" fitWidth="1142.0" layoutY="-3.0">
          <image>
             <Image url="@finalthemef.png" />
