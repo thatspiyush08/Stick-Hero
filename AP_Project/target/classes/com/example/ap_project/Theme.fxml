@@ -22,6 +22,22 @@
             <Label fx:id="CHERRYLABLE" layoutX="1058.0" text="0" />
          </children>
       </AnchorPane>
+      <AnchorPane fx:id="reloadAnchor" layoutX="6.0" prefHeight="534.0" prefWidth="1142.0">
+         <children>
+            <ImageView fitHeight="537.0" fitWidth="1176.0" layoutX="-6.0">
+               <image>
+                  <Image url="@1.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="start1" layoutX="444.0" layoutY="253.0" mnemonicParsing="false" onAction="#Restar" opacity="0.0" prefHeight="52.0" prefWidth="170.0" text="Button" />
+            <ImageView fitHeight="78.0" fitWidth="200.0" layoutX="444.0" layoutY="329.0">
+               <image>
+                  <Image url="@loadicon.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="load1" layoutX="459.0" layoutY="363.0" mnemonicParsing="false" onAction="#deserialization" opacity="0.0" prefHeight="29.0" prefWidth="163.0" text="Button" />
+         </children>
+      </AnchorPane>
       <AnchorPane fx:id="PAUSEPANE" prefHeight="534.0" prefWidth="1128.0">
          <children>
             <ImageView fitHeight="603.0" fitWidth="1142.0" layoutY="-69.0">
