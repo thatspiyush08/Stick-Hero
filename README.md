@@ -30,6 +30,7 @@ How To Play
 
 ~ You can revive the player after falling by using 3 Cherries.
 
+
 Assumptions To Remember
 
 ~ Do not touch on TouchPad  or do mouse click  while Stick-Hero is Moving.
@@ -39,4 +40,8 @@ Assumptions To Remember
 ~ When we will press the pause button, the pause menu will open and you can choose from a variety of options.
 
 ~ You can even save your progress  by selecting the save button from the pause menu.
+
+~ The quit button on the pause menu takes you back to the home screen.
+
+~ After coming back to homescreen, you need to load the game and then press resume!
 
