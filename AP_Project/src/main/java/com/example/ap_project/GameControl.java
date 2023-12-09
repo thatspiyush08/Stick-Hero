@@ -1,5 +1,6 @@
 package com.example.ap_project;
-
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
         import javafx.animation.*;
         import javafx.event.ActionEvent;
         import javafx.fxml.FXML;
@@ -35,9 +36,10 @@ package com.example.ap_project;
             public void deserialization(ActionEvent event);
         }
 
-public class GameControl implements Serializable ,Sserialization {
+public class GameControl implements Serializable ,Sserialization ,DeSerialization{
 
-
+            @FXML
+            private  AnchorPane reloadAnchor;
 
     @FXML
     private AnchorPane FallPane;
@@ -438,8 +440,8 @@ public class GameControl implements Serializable ,Sserialization {
     }
 
     public void Quits(ActionEvent e) throws IOException{
-        SceneController sc= new SceneController();
-        sc.Exit(e);
+        FallPane.toBack();
+        reloadAnchor.toFront();
     }
 
     public void ReSpawn(){
@@ -453,6 +455,7 @@ public class GameControl implements Serializable ,Sserialization {
             String c1= String.valueOf(cherryCount);
             CherryLabel.setText(c1);
             FallPane.toBack();
+            reloadAnchor.toBack();
 
         }
     }
@@ -479,4 +482,53 @@ public class GameControl implements Serializable ,Sserialization {
     }
 
 
+    private static GameControl gameControl;
+    @Override
+    public void deserialization(ActionEvent event) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("gamestate.ser"))) {
+            GameControl dgc = (GameControl) ois.readObject();
+            int dscore=dgc.getScore();
+            int dcherrycount=dgc.getCherrycount();
+            System.out.println("Game state deserialized successfully.");
+            System.out.println("Deserialised Score= "+ dscore);
+            System.out.println("Deserialised Cherry Count= "+ dcherrycount);
+
+            gameControl = dgc;
+            FallPane.toBack();
+            reloadAnchor.toBack();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
+    }
+
+    public  static class GameControlTest {
+        private GameControl gcc;
+
+        @Test
+        public void testScore() throws IOException {
+
+            assertNull(gcc.getScore());
+
+        }
+
+        @Test
+        public void testCherryCountIsNull() {
+            // Check if the initial cherry count is null
+            assertNull(gcc.getCherrycount());
+        }
+
+        @Test
+        public void testSerialization() {
+            // Call the serialization method
+            gcc.serialization();
+
+        }
+    }
 }
+
