@@ -36,5 +36,7 @@ Assumptions To Remember
 
 ~ If you flip the stickhero on the platform, it will fall and the game will end.
 
-~ When we will press the pause button
+~ When we will press the pause button, the pause menu will open and you can choose from a variety of options.
+
+~ You can even save your progress  by selecting the save button from the pause menu.
 
