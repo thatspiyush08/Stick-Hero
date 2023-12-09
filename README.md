@@ -40,3 +40,7 @@ Assumptions To Remember
 
 ~ You can even save your progress  by selecting the save button from the pause menu.
 
+~ The quit button on the pause menu takes you back to the home screen.
+
+
+
