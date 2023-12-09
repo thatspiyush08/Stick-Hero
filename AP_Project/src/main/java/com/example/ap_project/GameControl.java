@@ -170,6 +170,7 @@ public class GameControl {
 
 
     public void movement() {
+
         TranslateTransition move = new TranslateTransition(Duration.millis(1000), Shero);
 
         move.setCycleCount(1);
@@ -195,15 +196,19 @@ public class GameControl {
                 double currentPlatformCenter = rectangles[platformIndex - 1].getLayoutX();
                 double nextPlatformCenter = rectangles[platformIndex].getLayoutX();
                 double shiftDistance = nextPlatformCenter - currentPlatformCenter;
-
                 for (int j = 0; j < rectangles.length; j++) {
+
                     TranslateTransition shiftRectangle = new TranslateTransition(Duration.millis(1000), rectangles[j]);
                     shiftRectangle.setToX(rectangles[j].getTranslateX() - shiftDistance);
                     shiftRectangle.play();
                     int i=j;
+
+
                     Timeline checkPlatform=new Timeline((new KeyFrame(Duration.millis(1), Event -> {
                         if (Shero.getBoundsInParent().intersects(rectangles[i].getBoundsInParent()) && isFlipped )
                         {
+                            double Xcoor=Shero.getX();
+                            double Ycoor=Shero.getY();
 //                            System.out.println("yes");
                             TranslateTransition falldown = new TranslateTransition(Duration.millis(500), Shero);
                             falldown.setByY(131);
@@ -213,6 +218,27 @@ public class GameControl {
 
                             ParallelTransition pT = new ParallelTransition(falldown, somersault);
                             pT.play();
+                            pT.setOnFinished(event1->{
+                                String s= String.valueOf(score);
+                                String c= String.valueOf(cherryCount);
+                                CHERRYLABLE.setText(c);
+                                MYSCORE.setText(s);
+                                FallPane.toFront();
+                                Shero.setRotate(0);
+                                TranslateTransition restore = new TranslateTransition(Duration.millis(100), Shero);
+                                restore.setToY(Ycoor);
+                                restore.setToX(Xcoor);
+
+                                if (isFlipped){
+                                    flipHero(Shero,score);
+                                }
+                                TranslateTransition shiftStick = new TranslateTransition(Duration.millis(1000), stickLine);
+                                shiftStick.setToX(rectangles[score-1].getX());
+                                shiftStick.play();
+                                stickLine.setRotate(0);
+                                stickLine.setHeight(0);
+                                restore.play();
+                            });
 
 
                         }
@@ -220,7 +246,6 @@ public class GameControl {
                     })));
                     checkPlatform.setCycleCount(Timeline.INDEFINITE);
                     checkPlatform.play();
-
 
                 }
 
@@ -295,6 +320,9 @@ public class GameControl {
                     stickman.Next_Platform = null;
                 }
             } else {
+                double Xcoord=Shero.getX();
+                double Ycoord=Shero.getY();
+
                 TranslateTransition shiftPlayer1 = new TranslateTransition(Duration.millis(1000), Shero);
                 shiftPlayer1.setToX(stickLine.getHeight() + 30);
                 shiftPlayer1.play();
@@ -326,6 +354,20 @@ public class GameControl {
                         CHERRYLABLE.setText(c);
                         MYSCORE.setText(s);
                         FallPane.toFront();
+
+                        TranslateTransition restore = new TranslateTransition(Duration.millis(100), Shero);
+                        restore.setToY(Ycoord);
+                        restore.setToX(Xcoord);
+                        if (isFlipped){
+                            flipHero(Shero,score);
+                        }
+                        TranslateTransition shiftStick = new TranslateTransition(Duration.millis(1000), stickLine);
+                        shiftStick.setToX(rectangles[score].getX());
+                        shiftStick.play();
+                        stickLine.setRotate(0);
+                        stickLine.setHeight(0);
+                        restore.play();
+
 
                     });
 
@@ -366,7 +408,7 @@ public class GameControl {
     }
 
     public void ReSpawn(){
-        if (cherryCount>=3){
+        if (cherryCount>=-100){
 
             String s= String.valueOf(score);
             String c= String.valueOf(cherryCount);
