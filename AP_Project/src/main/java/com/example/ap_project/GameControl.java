@@ -224,13 +224,36 @@ public class GameControl {
                 stickman.Current_Platform = rectangles[platformIndex];
                 if (platformIndex < rectangles.length - 1) {
                     stickman.Next_Platform = rectangles[platformIndex + 1];
-                    stickLine.setHeight(0);
-                    stickLine.setRotate(0);
+//                    stickLine.setHeight(0);
+//                    stickLine.setRotate(0);
                     TranslateTransition shiftStick = new TranslateTransition(Duration.millis(1000), stickLine);
-                    shiftStick.setToX(rectangles[platformIndex].getX());
+                    shiftStick.setToX(rectangles[platformIndex].getX()-(stickLine.getHeight()/2)-16);
                     shiftStick.play();
+                    int fl=platformIndex;
+                    shiftStick.setOnFinished(event3->{
+                        stickLine.setHeight(0);
+                        stickLine.setRotate(0);
+                        TranslateTransition shiftS = new TranslateTransition(Duration.millis(100), stickLine);
+                        shiftS.setToX(rectangles[fl].getX());
+                        shiftS.play();
+                    });
 
-                    // Check if isFlipped is true and update cherry opacity
+//                    int finalPlatformIndex = platformIndex;
+//                    Timeline stayStick = new Timeline(new KeyFrame(Duration.millis(1), event1 -> {
+//                        if (Shero.getBoundsInParent().intersects(rectangles[finalPlatformIndex ].getBoundsInParent())) {
+//                            stickLine.setHeight(0);
+//                            stickLine.setRotate(0);
+////                            stayStick.stop();
+//                        }
+//                    }));
+//                    stayStick.setCycleCount(Timeline.INDEFINITE);
+//                    stayStick.play();
+
+
+
+
+//
+//                     Check if isFlipped is true and update cherry opacity
 
 
                     Random random = new Random();
