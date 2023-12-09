@@ -150,7 +150,7 @@ public class GameControl {
             int platformIndex = -1;
 
             for (int i = 1; i < rectangles.length; i++) {
-                if (350 - 40 <= stickLine.getHeight() && (320 + rectangles[i].getWidth() >= stickLine.getHeight())) {
+                if (350 - 40 <= stickLine.getHeight() && (280 + rectangles[i].getWidth() >= stickLine.getHeight())) {
                     isOnPlatform = true;
                     platformIndex = i;
                     break;
