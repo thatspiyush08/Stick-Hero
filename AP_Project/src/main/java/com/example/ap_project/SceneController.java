@@ -14,14 +14,16 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.util.Random;
 
 
 
 
-public class SceneController {
+public class SceneController implements DeSerialization {
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -119,6 +121,22 @@ public class SceneController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+    private static GameControl gameControl;
+    @Override
+    public void deserialization() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("gamestate.ser"))) {
+            GameControl dgc = (GameControl) ois.readObject();
+            int dscore=dgc.getScore();
+            int dcherrycount=dgc.getCherrycount();
+            System.out.println("Game state deserialized successfully.");
+            System.out.println("Deserialised Score= "+ dscore);
+            System.out.println("Deserialised Cherry Count= "+ dcherrycount);
+
+            gameControl = dgc;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

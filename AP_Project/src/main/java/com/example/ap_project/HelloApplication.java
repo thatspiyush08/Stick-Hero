@@ -10,7 +10,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import java.io.File;
+
+import java.io.*;
 
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -18,8 +19,6 @@ import javafx.scene.Group;
 //import javafx.scene.media.MediaPlayer;
 //import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class HelloApplication extends Application {
     @FXML
@@ -46,8 +45,12 @@ public class HelloApplication extends Application {
 
 
 
+    private static GameControl gameControl;
 
     public static void main(String[] args) {
+
+
+
         launch();
 
     }

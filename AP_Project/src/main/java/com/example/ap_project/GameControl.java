@@ -3,7 +3,9 @@ package com.example.ap_project;
         import javafx.animation.*;
         import javafx.event.ActionEvent;
         import javafx.fxml.FXML;
-        import java.io.Serializable;
+
+        import java.io.*;
+
         import javafx.fxml.FXMLLoader;
         import javafx.scene.Node;
         import javafx.scene.Parent;
@@ -18,14 +20,24 @@ package com.example.ap_project;
         import javafx.stage.Stage;
         import javafx.util.Duration;
 
-        import java.io.IOException;
         import java.util.Random;
         import java.util.concurrent.TimeUnit;
 
         import static com.example.ap_project.SceneController.*;
         import static com.example.ap_project.SceneController.cherries;
 
-public class GameControl implements Serializable {
+
+        interface Sserialization{
+            public void  serialization();
+        }
+
+        interface DeSerialization{
+            public void deserialization();
+        }
+
+public class GameControl implements Serializable ,Sserialization {
+
+
 
     @FXML
     private AnchorPane FallPane;
@@ -444,4 +456,27 @@ public class GameControl implements Serializable {
 
         }
     }
+
+    @Override
+    public void serialization() {
+        GameControl gc = new GameControl();
+
+        // Store the original score value
+        int originalScore = score;
+        int ccount = cherryCount;
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("gamestate.ser"))) {
+            gc.setScore(originalScore);
+            gc.setCherryCount(ccount);
+
+            oos.writeObject(gc);
+            System.out.println(ccount);
+            System.out.println(originalScore);
+            System.out.println("Game state serialized successfully.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
