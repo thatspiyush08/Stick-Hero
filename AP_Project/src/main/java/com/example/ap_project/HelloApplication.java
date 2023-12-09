@@ -44,7 +44,6 @@ public class HelloApplication extends Application {
     }
 
 
-
     private static GameControl gameControl;
 
     public static void main(String[] args) {
