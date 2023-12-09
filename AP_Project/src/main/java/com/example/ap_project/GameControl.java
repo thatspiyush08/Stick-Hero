@@ -32,7 +32,7 @@ package com.example.ap_project;
         }
 
         interface DeSerialization{
-            public void deserialization();
+            public void deserialization(ActionEvent event);
         }
 
 public class GameControl implements Serializable ,Sserialization {
@@ -421,7 +421,7 @@ public class GameControl implements Serializable ,Sserialization {
         PAUSEPANE.toFront();
     }
     public void setCherryCount(int ccount) {
-        this.cherryCount=cherryCount;
+        this.cherryCount=ccount;
     }
 
     public void setScore(int score) {

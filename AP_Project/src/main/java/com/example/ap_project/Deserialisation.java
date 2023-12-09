@@ -14,7 +14,7 @@ public class Deserialisation {
             System.out.println("Deserialised Score= "+ dscore);
             System.out.println("Deserialised Cherry Count= "+ dcherrycount);
 
-            gameControl = dgc;
+          gameControl = dgc;
         } catch (Exception e) {
             e.printStackTrace();
         }

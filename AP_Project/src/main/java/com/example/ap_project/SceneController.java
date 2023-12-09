@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -34,11 +36,46 @@ public class SceneController implements DeSerialization {
     public static ImageView[] cherries = new ImageView[50];
 
 
+    @FXML
+    private AnchorPane FallPane;
+
+    @FXML
+    private Label MYSCORE;
+    private static final long serialVersionUID = 1L;
+
+    @FXML
+    private Label HIGHSCORE;
+
+    @FXML
+    private Label CHERRYLABLE;
+
+    @FXML
+    private AnchorPane PAUSEPANE;
+    @FXML
+    private Button RESTART;
+
+    @FXML
+    private Button RESUME;
+
+    @FXML
+    private Button QUIT;
+
+    @FXML
+    private Button SAVE;
+    @FXML
+    private Label PAUSELABLE;
+
+    @FXML
+    private Label CherryLabel;
+    @FXML
+    private Label ScoreLabel;
 
 
 
 
-    public void HomeToRunController(ActionEvent event) throws IOException {
+
+
+    public void HomeToRunController(ActionEvent event) throws IOException  {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/com/example/ap_project/Theme.fxml"));
         root = fxmlLoader.load();
         Scene scene = new Scene(root, 1100, 520);
@@ -124,7 +161,7 @@ public class SceneController implements DeSerialization {
     }
     private static GameControl gameControl;
     @Override
-    public void deserialization() {
+    public void deserialization(ActionEvent event) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("gamestate.ser"))) {
             GameControl dgc = (GameControl) ois.readObject();
             int dscore=dgc.getScore();
@@ -134,9 +171,19 @@ public class SceneController implements DeSerialization {
             System.out.println("Deserialised Cherry Count= "+ dcherrycount);
 
             gameControl = dgc;
+
+            gameControl.Restar(event);
+            gameControl.setCherryCount(dcherrycount);
+            gameControl.setScore(dscore);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+
+
     }
 
 
