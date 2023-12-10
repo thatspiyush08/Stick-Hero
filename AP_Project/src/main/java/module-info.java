@@ -5,6 +5,7 @@ module com.example.ap_project {
     requires org.junit.jupiter.api;
 
     requires org.junit.platform.commons;
+    requires javafx.media;
     opens com.example.ap_project to javafx.fxml;
     exports com.example.ap_project;
 }

@@ -10,6 +10,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 import java.io.*;
 
@@ -31,10 +33,12 @@ public class HelloApplication extends Application {
     {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/com/example/ap_project/HomeScreen.fxml"));
 
-        String path = "/home/piyush/SEM3/AP/Stick-Hero/AP_Project/src/main/resources/com/example/ap_project/Georges-Lament-Go-By-Ocean-Ryan1.mp3/";
+        String path = "/C://Users//mohmm//Downloads//music//George's Lament - Go By Ocean _ Ryan McCaffrey.mp3/";
+        Media media = new Media(new File(path).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setAutoPlay(true);
+        Scene scene = new Scene(fxmlLoader.load(), 1100, 630);
 
-        root = fxmlLoader.load();
-        Scene scene = new Scene(root, 1100, 630);
 
         stage.setTitle("Made with love by Ayaan & Piyush");
         stage.setScene(scene);
