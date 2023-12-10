@@ -50,6 +50,7 @@ public class GameControl implements Serializable ,Sserialization ,DeSerializatio
 
     @FXML
     private Label HIGHSCORE;
+    private int max=0;
 
     @FXML
     private Label CHERRYLABLE;
@@ -219,6 +220,10 @@ public class GameControl implements Serializable ,Sserialization ,DeSerializatio
 
             if (isOnPlatform) {
                 score++;
+                if(score>max)
+                {
+                    max=score;
+                }
 
                 setCherriesOpacity(score);
 
@@ -252,6 +257,7 @@ public class GameControl implements Serializable ,Sserialization ,DeSerializatio
                                 String c= String.valueOf(cherryCount);
                                 CHERRYLABLE.setText(c);
                                 MYSCORE.setText(s);
+                                HIGHSCORE.setText(""+max);
                                 FallPane.toFront();
                                 Shero.setRotate(0);
                                 TranslateTransition restore = new TranslateTransition(Duration.millis(100), Shero);
@@ -381,6 +387,7 @@ public class GameControl implements Serializable ,Sserialization ,DeSerializatio
                         String s= String.valueOf(score);
                         String c= String.valueOf(cherryCount);
                         CHERRYLABLE.setText(c);
+                        HIGHSCORE.setText(""+max);
                         MYSCORE.setText(s);
                         FallPane.toFront();
 
@@ -451,6 +458,7 @@ public class GameControl implements Serializable ,Sserialization ,DeSerializatio
             String c= String.valueOf(cherryCount);
             CHERRYLABLE.setText(c);
             MYSCORE.setText(s);
+            HIGHSCORE.setText(""+max);
             cherryCount-=3;
             String c1= String.valueOf(cherryCount);
             CherryLabel.setText(c1);
