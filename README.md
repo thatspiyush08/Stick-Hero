@@ -45,5 +45,5 @@ Assumptions To Remember
 
 ~ After coming back to homescreen, you need to load the game and then press resume!
 
-~After the loading you have to Resume the game we introduced this option to give the player time to resume the old gave
+~After the loading you have to Resume the game we introduced this option to give the player time to resume the old game.
 
