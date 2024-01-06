@@ -12,7 +12,7 @@ Good Coding Practices Used:
 ~ Singleton Design Pattern and various other design patterns used.
 ~ Name of the variables and methods used are kept such that any programmer will be able to guess their use and working.
 ~ The flow of the Code is very simple and fluent making the game more interesting and interactive for the users.
-~
+
 
 Features of the Game:
 
@@ -46,4 +46,3 @@ Assumptions To Remember
 ~ After coming back to homescreen, you need to load the game and then press resume!
 
 ~After the loading you have to Resume the game we introduced this option to give the player time to resume the old game.
-
